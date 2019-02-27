@@ -33,7 +33,7 @@ variable "nat_high_availability_count" {
   default     = 		"2"
 }
 variable "private_key_path" {
-  default = "/home/ubuntu/config/Continuous-infra.pem"
+  default = "/home/ubuntu/Continuous-infra.pem"
 }
 variable "key_name" {
   default = "Continuous-infra"
