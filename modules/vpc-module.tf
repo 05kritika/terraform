@@ -104,3 +104,63 @@ resource "aws_route" "private_subnet_route" {
   nat_gateway_id         	= 	"${element(aws_nat_gateway.natgw.*.id, count.index)}"
   count                  	= 	"${(var.nat_high_availability && var.create_private_subnets) ? var.private_subnet_count: (var.create_private_subnets ? 1 : 0)}"    
 }
+
+# Nginx security group 
+resource "aws_security_group" "nginx-sg" {
+  name        = "nginx_sg"
+  vpc_id      = "${aws_vpc.vpc.id}"
+
+  # SSH access from anywhere
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # HTTP access from the VPC
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # outbound internet access
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags {
+    Name = "nginx-security-group"
+  }
+
+}
+
+
+resource "aws_instance" "nginx" {
+  ami           = "${var.ami}"
+  instance_type = "${var.instance_type}"
+  subnet_id     = "${element(aws_subnet.public_subnets.*.id, count.index)}"
+  vpc_security_group_ids = ["${aws_security_group.nginx-sg.id}"]
+  key_name        = "${var.key_name}"
+
+  connection {
+    user        = "ubuntu"
+    private_key = "${file(var.private_key_path)}"
+  }
+
+  tags {
+    Name = "nginx1"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt-get install nginx -y",
+      "sudo systemctl start nginx"
+    ]
+  }
+}
