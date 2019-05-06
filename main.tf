@@ -10,8 +10,8 @@ variable "key_name" {
 ## PROVIDERS ##
 
 provider "aws" {
-  access_key = "${var.aws_access_key}"
-  secret_key = "${var.aws_secret_key}"
+  access_key = "AKIAJKOSIUHKDCYM4J7Q"
+  secret_key = "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"
   region     = "us-east-1"
 }
 
