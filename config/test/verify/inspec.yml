@@ -1,5 +1,4 @@
 name: verify
-title: InSpec Profile to verify Terraform provisioning
-
-summary: An InSpec test profile to verify terrafrom setups
+title: InSpec Profile to verify Infrastructure through Terraform provisioning
+summary: An InSpec test profile to test and verify Infrastructure components created using terrafrom
 version: 0.1.0
