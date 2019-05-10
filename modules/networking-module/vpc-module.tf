@@ -149,7 +149,10 @@ resource "aws_instance" "nginx" {
   tags {
     Name                        =       "nginx1"
   }
-
+  
+  provisioner "local-exec" {
+    command = "echo ${aws_instance.nginx.public_dns} > public_dns.txt"
+  }
   provisioner "remote-exec" {
     inline                      = [
                                         "sudo apt-get update -y",
