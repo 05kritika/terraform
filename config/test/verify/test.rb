@@ -1,6 +1,6 @@
 control 'ec2-instance-1.1' do
   impact 1.0
-  title 'Ensure no sensitive information is passed via the user-data'
+  title 'Test case to check if the package is successfully installed and configured'
 
   describe service('nginx') do
     it { should be_installed }
